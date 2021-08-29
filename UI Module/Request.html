@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Request</title>
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet"
+        type="text/css">
+
+    <!-- Custom styles for this template -->
+    <link href="css/landing-page.min.css" rel="stylesheet">
+
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                    </li>
+                </ul>
+            </div>
+
+
+
+        </nav>
+    </div>
+
+
+
+    <!-- <div class="header">
+        <div class="row">
+            <h1>Get Distance</h1>
+        </div>
+    </div> -->
+
+    <div class="container">
+
+
+        <div class="container-map" id="google-map"></div>
+
+
+
+        <form>
+            <!-- Location 1 -->
+            <div class="row">
+                <div class="col-1">
+                    <div class="location-label">
+                        <label>Origin: </label>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="location-input">
+                        <input type="text" class="form-control" id="location-1" name="origin"
+                            placeholder="Enter a start location...">
+                    </div>
+                </div>
+
+            </div>
+            <!-- Location 2 -->
+            <div class="row">
+                <div class="col-1">
+                    <div class="location-label">
+                        <label>Destination: </label>
+                    </div>
+                </div>
+
+                <div class=col-3>
+                    <div class="location-input">
+                        <input type="text" class="form-control" id="location-2" name="destination"
+                            placeholder="Enter a last location...">
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Submit button -->
+            <div class="row" style="margin-top: 20px;">
+
+                <button class="btn btn-primary" type="button" onclick="calcRoute();">Check Distance</button>
+                <div id="output" class="result-table"></div>
+            </div>
+
+        </form>
+    </div>
+
+
+
+    <div class="container">
+
+
+        <div class="row" style="margin-top: 30px; margin-bottom: 30px;">
+            <input type="datetime-local" id="start-time" name="meeting-time" value="2021-04-15T00:00"
+                min="2021-01-15T00:00" max="2022-06-15T00:00">
+            <label for="start-time"> Start time</label>
+
+
+
+            <input type="datetime-local" id="end-time" name="meeting-time" value="2021-04-15T02:00">
+            <label for="end-time"> End time</label>
+
+        </div>
+        <p> if duration is less than 3 hours, billed as trip</p>
+
+
+
+        <table class="table" id="findresourcetable">
+            <!-- <caption>List of users</caption> -->
+            <thead>
+
+                <div>
+                    <h3>Find Equipment </h3>
+                </div>
+                <tr>
+
+                    <th scope="col">Equipment category</th>
+                    <th scope="col">Length</th>
+                    <th scope="col">Breadth</th>
+                    <th scope="col">Height</th>
+
+
+                </tr>
+                <tr>
+
+                    <td>
+                        <select id="add_category" class="form-control" name="category" style="width: fit-content;">
+                            <option value="EXCAVATOR">EXCAVATOR</option>
+                            <option value="FORKLIFT" selected>FORKLIFT</option>
+                            <option value="STACKER">STACKER</option>
+                            <option value="LIFT">LIFT</option>
+                            <option value="TRACTOR">TRACTOR</option>
+                            <option value="STACKER">STACKER</option>
+                            <option value="DUMPER">DUMPER</option>
+                            <option value="PALLET">PALLET</option>
+
+                            <option value="COMPRESSOR">COMPRESSOR</option>
+                            <option value="GENERATOR">GENERATOR</option>
+                            <option value="CONTAINER">CONTAINER</option>
+
+
+
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" id="add_length" required placeholder="Enter Length">
+
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" id="add_breadth" required placeholder="Enter Breadth">
+
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" id="add_height" required placeholder="Enter Height">
+
+                    </td>
+                </tr>
+            </thead>
+        </table>
+
+        <table class="table" id="findTransportTable">
+            <!-- <caption>List of users</caption> -->
+            <thead>
+
+                <div>
+                    <h3>Find Transport </h3>
+                </div>
+                <tr>
+
+                    <th scope="col">Transport Type</th>
+                    <th scope="col">Min Capacity</th>
+
+
+
+                </tr>
+                <tr>
+
+                    <td>
+                        <select id="add_category_transport" class="form-control" name="category"
+                            style="width: fit-content;">
+                            <option value="VAN" selected>VAN</option>
+                            <option value="LORRY">LORRY</option>
+
+
+
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" id="t_add_capacity" required
+                            placeholder="Enter Capacity">
+
+                    </td>
+
+
+
+                    <!-- <td>
+                        <input type="text" class="form-control" id="t_add_breadth" required placeholder="Enter Breadth">
+
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" id="t_add_height" required placeholder="Enter Height">
+
+                    </td> -->
+                </tr>
+            </thead>
+        </table>
+
+
+
+        <button class="btn btn-primary" id="find" type="button" onclick="checkAvailablity();">Find Available
+            Equipment</button>
+
+        <button class="btn btn-primary" style="margin-right: 10px;" type="button" onclick="clearRoute();">Clear</button>
+        <div>
+            <h3>Available Equipment </h3>
+        </div>
+
+        <table class="table" id="resourcetable">
+            <!-- <caption>List of users</caption> -->
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Equipment/Items</th>
+                    <th scope="col">Dimensions</th>
+                    <th scope="col">weight</th>
+                    <!-- <th scope="col">Quantity</th> -->
+
+                </tr>
+            </thead>
+
+        </table>
+
+
+        <div>
+            <h3>Available Transport </h3>
+        </div>
+
+        <table class="table" id="transportresourcetable">
+            <!-- <caption>List of users</caption> -->
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Equipment/Items</th>
+                    <th scope="col">Dimensions</th>
+                    <th scope="col">Capacity</th>
+                    <!-- <th scope="col">Quantity</th> -->
+
+                </tr>
+            </thead>
+
+        </table>
+
+
+        <div id="myDIV" style="display: block;">
+
+
+            <div>
+                <h3>Request Form </h3>
+            </div>
+
+            <table class="table" id="transportresourcetable">
+                <!-- <caption>List of users</caption> -->
+                <thead>
+                    <tr>
+
+                        <th scope="col">Quantity of Equipment/Items</th>
+                        <th scope="col">Quantity of Transport</th>
+                        <th scope="col">Special Request</th>
+                        <!-- <th scope="col">Quantity</th> -->
+
+                    </tr>
+                    <tr>
+
+                        <td>
+                            <div class="location-input">
+                                <input type="text" class="form-control" id="quantityEquipment" name="destination"
+                                    placeholder="Enter quantity">
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="location-input">
+                                <input type="text" class="form-control" id="quantityTransport" name="destination"
+                                    placeholder="Enter quantity">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="location-input">
+                                <input type="text" class="form-control" id="specialRequest" name="destination"
+                                    placeholder="Enter a special request">
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    </td>
+                </thead>
+
+
+
+            </table>
+
+            <div>
+                <button class="btn btn-primary" type=" button" onclick="submitRequest();">Submit
+                    Request</button>
+
+
+            </div>
+
+        </div>
+    </div>
+
+    <section class="features-icons bg-light text-center">
+        <div class="container" id="page-links">
+
+        </div>
+    </section>
+
+
+
+
+
+</body>
+<script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2JFohs0HXDvdbvwjYP9dI3TmnyDOcv0Q&libraries=places"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+</html>
+
+
+<script>
+
+    var distance = ""
+    var myLatLng = { lat: 1.3521, lng: 103.8198 };
+    var mapOptions = {
+        center: myLatLng,
+        zoom: 12,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    // Hide result box
+    document.getElementById("output").style.display = "none";
+
+    // Create/Init map
+    var map = new google.maps.Map(document.getElementById('google-map'), mapOptions);
+
+    // Create a DirectionsService object to use the route method and get a result for our request
+    var directionsService = new google.maps.DirectionsService();
+
+    // Create a DirectionsRenderer object which we will use to display the route
+    var directionsDisplay = new google.maps.DirectionsRenderer();
+
+    // Bind the DirectionsRenderer to the map
+    directionsDisplay.setMap(map);
+
+
+    // Define calcRoute function
+    function calcRoute() {
+        //create request
+        var request = {
+            origin: document.getElementById("location-1").value,
+            destination: document.getElementById("location-2").value,
+            travelMode: google.maps.TravelMode.DRIVING,
+            unitSystem: google.maps.UnitSystem.METRIC
+        }
+
+        // Routing
+        directionsService.route(request, function (result, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+
+                //Get distance and time     
+                distance = result.routes[0].legs[0].distance.text;
+
+                $("#output").html("<span class='result-table'> Driving distance: " + result.routes[0].legs[0].distance.text + ".<br />Duration: " + result.routes[0].legs[0].duration.text + ".</span>");
+                document.getElementById("output").style.display = "block";
+
+                //display route
+                directionsDisplay.setDirections(result);
+            } else {
+                //delete route from map
+                directionsDisplay.setDirections({ routes: [] });
+                //center map in London
+                map.setCenter(myLatLng);
+
+                //Show error message           
+
+                alert("Can't find road! Please try again!");
+                clearRoute();
+            }
+        });
+
+    }
+
+    // Clear results
+
+    function clearRoute() {
+        document.getElementById("output").style.display = "none";
+        document.getElementById("location-1").value = "";
+        document.getElementById("location-2").value = "";
+        directionsDisplay.setDirections({ routes: [] });
+        document.getElementById("start-time").disabled = false
+
+        document.getElementById("end-time").disabled = false
+
+        document.getElementById("add_category").disabled = false
+        document.getElementById("add_height").disabled = false
+        document.getElementById("add_length").disabled = false
+        document.getElementById("add_breadth").disabled = false
+
+        document.getElementById("add_category_transport").disabled = false
+        document.getElementById("t_add_capacity").disabled = false
+
+        document.getElementById('location-1').disabled = false
+        document.getElementById('location-2').disabled = false
+
+
+
+
+        document.getElementById('find').disabled = false
+        // var x = document.getElementById("myDIV");
+
+        // x.style.display = "block";
+
+
+        total = 0;
+
+        transporttotal = 0;
+
+
+        var tableHeaderRowCount = 1;
+        var table = document.getElementById('resourcetable');
+        var rowCount = table.rows.length;
+
+        for (var i = tableHeaderRowCount; i < rowCount; i++) {
+            table.deleteRow(tableHeaderRowCount);
+        }
+        tableHeaderRowCount = 1;
+        table = document.getElementById('transportresourcetable');
+        rowCount = table.rows.length;
+
+        for (var i = tableHeaderRowCount; i < rowCount; i++) {
+            table.deleteRow(tableHeaderRowCount);
+        }
+
+    }
+
+    // Create autocomplete objects for all inputs
+
+    var options = {
+        types: ['(postal_code)']
+    }
+
+
+    var input1 = document.getElementById("location-1");
+    var autocomplete1 = new google.maps.places.Autocomplete(input1, options);
+
+    var input2 = document.getElementById("location-2");
+    var autocomplete2 = new google.maps.places.Autocomplete(input2, options);
+
+    // load all resource
+    // viewAllResources();
+
+
+
+
+
+    var startDate = ""
+    var endDate = ""
+
+    function getDates() {
+
+        startDate = document.getElementById("start-time").value
+
+        endDate = document.getElementById("end-time").value
+
+
+        startDate = startDate.split("T")
+        startDate[1] = startDate[1] + ":00"
+        startDate = startDate[0] + " " + startDate[1]
+
+        endDate = endDate.split("T")
+        endDate[1] = endDate[1] + ":00"
+        endDate = endDate[0] + " " + endDate[1]
+
+        returnList = [];
+
+        returnList.push(startDate);
+        returnList.push(endDate)
+
+        return returnList;
+
+
+
+
+    }
+    var total = 0;
+    var transporttotal = 0;
+
+    function checkAvailablity() {
+        calcRoute()
+        distance = distance.split(" ")
+        distance = distance[0]
+
+
+        var dates = getDates();
+
+        startDate = dates[0]
+        endDate = dates[1]
+        var data = JSON.stringify({
+
+            "equipmentCategory": document.getElementById("add_category").value,
+            "equipmentHeight": document.getElementById("add_height").value,
+            "equipmentLength": document.getElementById("add_length").value,
+            "equipmentWidth": document.getElementById("add_breadth").value,
+            "reqEndTime": endDate,
+            "reqStartTime": startDate
+
+        });
+        console.log(data)
+        var config = {
+            method: 'post',
+            url: 'http://localhost:5001/api/timetable/internal/getResourcesByDimensions',
+
+            data: data,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+        };
+        axios(config)
+
+            .then(response => {
+
+                document.getElementById("start-time").disabled = true
+                document.getElementById("end-time").disabled = true
+                document.getElementById("add_category").disabled = true
+                document.getElementById("add_height").disabled = true
+                document.getElementById("add_length").disabled = true
+                document.getElementById("add_breadth").disabled = true
+                document.getElementById("add_category_transport").disabled = true
+                document.getElementById("t_add_capacity").disabled = true
+                document.getElementById('find').disabled = true
+                document.getElementById('location-1').disabled = true
+                document.getElementById('location-2').disabled = true
+
+
+                // var x = document.getElementById("myDIV");
+
+                // x.style.display = "none";
+
+
+                for (i = 0; i < response.data.length; i++) {
+
+
+                    if (response.data[i].type == "EQUIPMENT" && response.data[i].category == document.getElementById("add_category").value) {
+                        var resourcetable = document.getElementById("resourcetable")
+                        var row = resourcetable.insertRow(-1);
+                        row.className = response.data[i].category;
+                        row.className += " equipmentrow";
+
+                        var cell1 = row.insertCell(0);
+                        var cell2 = row.insertCell(1);
+                        var cell3 = row.insertCell(2);
+                        var cell4 = row.insertCell(3);
+                        // var cell5 = row.insertCell(4);
+                        var year = response.data[i].manufactureYear
+                        // if (year == null) {
+                        //     year = ""
+                        // } else {
+                        //     year = " (" + year + ")"
+                        // }
+                        total++;
+                        cell1.innerHTML = total;
+                        cell2.innerHTML = response.data[i].brand + " " + response.data[i].equipmentName;
+                        cell3.innerHTML = response.data[i].length + "x" + response.data[i].width + "x" + response.data[i].height;
+                        cell4.innerHTML = response.data[i].weight + "kg"
+                    }
+
+
+
+
+                    else if (response.data[i].workingCapacity >= document.getElementById("t_add_capacity").value && response.data[i].type == "TRANSPORT" && response.data[i].category == document.getElementById("add_category_transport").value) {
+
+                        var resourcetable = document.getElementById("transportresourcetable")
+                        var row = resourcetable.insertRow(-1);
+                        row.className = response.data[i].category;
+                        row.className += " equipmentrow";
+
+                        var cell1 = row.insertCell(0);
+                        var cell2 = row.insertCell(1);
+                        var cell3 = row.insertCell(2);
+                        var cell4 = row.insertCell(3);
+                        transporttotal++;
+                        cell1.innerHTML = transporttotal;
+                        cell2.innerHTML = response.data[i].brand + " " + response.data[i].equipmentName;
+                        cell3.innerHTML = response.data[i].length + "x" + response.data[i].width + "x" + response.data[i].height;
+                        cell4.innerHTML = response.data[i].workingCapacity + "kg"
+                    }
+
+
+                }
+
+                var data = JSON.stringify({
+
+                    "equipmentCategory": document.getElementById("add_category").value,
+                    "equipmentHeight": document.getElementById("add_height").value,
+                    "equipmentLength": document.getElementById("add_length").value,
+                    "equipmentWidth": document.getElementById("add_breadth").value,
+                    "reqEndTime": endDate,
+                    "reqStartTime": startDate
+
+
+
+                });
+
+
+
+
+            })
+            .catch(error => console.log(error));
+
+
+        var data = JSON.stringify({
+
+            "equipmentCategory": document.getElementById("add_category_transport").value,
+            "equipmentHeight": document.getElementById("add_height").value,
+            "equipmentLength": document.getElementById("add_length").value,
+            "equipmentWidth": document.getElementById("add_breadth").value,
+            "reqEndTime": endDate,
+            "reqStartTime": startDate
+
+        });
+        console.log(data)
+        var config = {
+            method: 'post',
+            url: 'http://localhost:5001/api/timetable/internal/getResourcesByDimensions',
+
+            data: data,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+        };
+        axios(config)
+            .then(response => {
+
+                document.getElementById("start-time").disabled = true
+                document.getElementById("end-time").disabled = true
+                document.getElementById("add_category").disabled = true
+                document.getElementById("add_height").disabled = true
+                document.getElementById("add_length").disabled = true
+                document.getElementById("add_breadth").disabled = true
+                document.getElementById("add_category_transport").disabled = true
+                document.getElementById("t_add_capacity").disabled = true
+                document.getElementById('find').disabled = true
+                document.getElementById('location-1').disabled = true
+                document.getElementById('location-2').disabled = true
+
+
+
+                for (i = 0; i < response.data.length; i++) {
+                    // console.log(response.data[i].category)
+                    // console.log(response.data[i].type)
+                    ;
+
+                    if (response.data[i].type == "EQUIPMENT" && response.data[i].category == document.getElementById("add_category").value) {
+                        var resourcetable = document.getElementById("resourcetable")
+                        var row = resourcetable.insertRow(-1);
+                        row.className = response.data[i].category;
+                        row.className += " equipmentrow";
+
+                        var cell1 = row.insertCell(0);
+                        var cell2 = row.insertCell(1);
+                        var cell3 = row.insertCell(2);
+                        var cell4 = row.insertCell(3);
+
+                        var year = response.data[i].manufactureYear
+
+                        total++;
+                        cell1.innerHTML = total;
+                        cell2.innerHTML = response.data[i].brand + " " + response.data[i].equipmentName;
+                        cell3.innerHTML = response.data[i].length + "x" + response.data[i].width + "x" + response.data[i].height;
+                        cell4.innerHTML = response.data[i].weight + "kg"
+                    }
+
+
+
+
+                    if (response.data[i].workingCapacity >= document.getElementById("t_add_capacity").value && response.data[i].type == "TRANSPORT" && response.data[i].category == document.getElementById("add_category_transport").value) {
+
+                        var resourcetable = document.getElementById("transportresourcetable")
+                        var row = resourcetable.insertRow(-1);
+                        row.className = response.data[i].category;
+                        row.className += " equipmentrow";
+
+                        var cell1 = row.insertCell(0);
+                        var cell2 = row.insertCell(1);
+                        var cell3 = row.insertCell(2);
+                        var cell4 = row.insertCell(3);
+                        transporttotal++;
+                        cell1.innerHTML = transporttotal;
+                        cell2.innerHTML = response.data[i].brand + " " + response.data[i].equipmentName;
+                        cell3.innerHTML = response.data[i].length + "x" + response.data[i].width + "x" + response.data[i].height;
+                        cell4.innerHTML = response.data[i].workingCapacity + "kg"
+                    }
+
+
+                }
+
+
+
+
+
+
+            })
+            .catch(error => console.log(error));
+
+
+
+
+
+
+    }
+
+
+    function submitRequest() {
+        // console.log(sessionStorage.getItem("accessToken"))
+
+        var dates = getDates();
+
+        startDate = dates[0]
+        endDate = dates[1]
+
+     
+
+        startDate1 = Date.parse(startDate)
+        endDate1= Date.parse(endDate)
+        console.log(startDate1)
+        console.log(endDate1)
+        difference =  (endDate1-startDate1)/(1000 * 60 * 60 )
+
+        if (difference >= 3){
+            var rentalByTrip = false
+        }else{
+            rentalByTrip = true
+        }
+
+        userId = sessionStorage.getItem('userId')
+
+        var data = JSON.stringify({
+
+            "capacityOfTransport": document.getElementById("t_add_capacity").value,
+            "endDatetime": endDate,
+            "endLocationPostalCode": document.getElementById('location-2').value,
+            "equipmentCategory": document.getElementById("add_category").value,
+            "equipmentHeight": document.getElementById("add_height").value,
+            "equipmentLength": document.getElementById("add_length").value,
+            "equipmentQuantity": document.getElementById("quantityEquipment").value ,
+            "equipmentWidth": document.getElementById("add_breadth").value,
+            "rentalByTrip": rentalByTrip,
+            "rentalDuration": difference,
+            "routeDistance": distance,
+            "specialRequest": document.getElementById("specialRequest").value,
+            "startDatetime": startDate,
+            "startLocationPostalCode": document.getElementById('location-1').value,
+
+            "typeOfTransporting": "LORRY",
+            "userId": userId
+
+        });
+
+
+        // console.log(data)
+        var config = {
+            method: 'post',
+            url: 'http://localhost:8710/processing/api/user/new-request',
+
+            data: data,
+            headers: {
+                'Content-Type': 'application/json',
+
+                "Authorization": "Bearer " + sessionStorage.getItem("accessToken"),
+
+
+            },
+
+        };
+        console.log(config)
+        axios(config)
+            .then(response => {
+                alert(response.data)
+                location.reload()
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
+
+
+
+
+
+</script>
+
+
+
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

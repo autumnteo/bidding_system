@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Landing Page</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet"
+        type="text/css">
+
+    <!-- Custom styles for this template -->
+    <link href="css/landing-page.min.css" rel="stylesheet">
+
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <div class="container">
+
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <!-- to disappear when logged in -->
+
+            <div class="row " id="log">
+
+            </div>
+
+
+        </nav>
+
+    </div>
+
+    <!-- realbody -->
+
+    <div class="container">
+
+        <table class="table" id="requestTable">
+            <caption>List of open requests</caption>
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Request Id</th>
+                    <th scope="col">Request Status</th>
+                    <th scope="col">Equipment Category</th>
+                    <th scope="col">Equipment Height</th>
+                    <th scope="col">Equipment Length</th>
+                    <th scope="col">Equipment Width</th>
+                    <th scope="col">Equipment Quantity</th>
+                    <th scope="col">Transport Capacity</th>
+                    <th scope="col">Start Date Time</th>
+                    <th scope="col">End Date Time</th>
+                    <th scope="col">Start Location Postal Code</th>
+                    <th scope="col">End Location Postal Code</th>
+                    <th scope="col">Route Distance</th>
+                    <th scope="col">Type of Transport</th>
+                    <th scope="col">Rental by Trip</th>
+                    <th scope="col">Rental Duration</th>
+                    <th scope="col">Special Request</th>
+                    <th scope="col">Request Submission Time</th>
+                    <th scope="col">Place Bid</th>
+                </tr>
+            </thead>
+
+        </table>
+
+
+
+    </div>
+
+
+
+
+    <!-- Icons Grid -->
+    <section class="features-icons bg-light text-center">
+        <div class="container">
+            <div class="row" id="page-links">
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <footer class="footer bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
+                    <ul class="list-inline mb-2">
+                        <li class="list-inline-item">
+                            <a href="#">About</a>
+                        </li>
+                        <li class="list-inline-item">&sdot;</li>
+                        <li class="list-inline-item">
+                            <a href="#">Contact</a>
+                        </li>
+                        <li class="list-inline-item">&sdot;</li>
+                        <li class="list-inline-item">
+                            <a href="#">Terms of Use</a>
+                        </li>
+                        <li class="list-inline-item">&sdot;</li>
+                        <li class="list-inline-item">
+                            <a href="#">Privacy Policy</a>
+                        </li>
+                    </ul>
+                    <p class="text-muted small mb-4 mb-lg-0">&copy; Antzbuildz 2021. All Rights Reserved.</p>
+                </div>
+                <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item mr-3">
+                            <a href="#">
+                                <i class="fab fa-facebook fa-2x fa-fw"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item mr-3">
+                            <a href="#">
+                                <i class="fab fa-twitter-square fa-2x fa-fw"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#">
+                                <i class="fab fa-instagram fa-2x fa-fw"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+
+
+        url = "http://localhost:8710/bid/api/request/getOpen"
+
+        var config = {
+            method: 'get',
+            url: url,
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + sessionStorage.getItem("accessToken")
+            },
+
+
+        };
+        axios(config)
+            .then(response => {
+                console.log(response)
+                console.log(response.data)
+
+                var total = 0
+
+                for (i = 0; i < response.data.length; i++) {
+                    total++;
+
+                    var resourcetable = document.getElementById("requestTable")
+                    var row = resourcetable.insertRow(-1);
+
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    var cell3 = row.insertCell(2);
+                    var cell4 = row.insertCell(3);
+                    var cell5 = row.insertCell(4);
+                    var cell6 = row.insertCell(5);
+                    var cell7 = row.insertCell(6);
+                    var cell8 = row.insertCell(7);
+                    var cell9 = row.insertCell(8);
+                    var cell10 = row.insertCell(9);
+                    var cell11 = row.insertCell(10);
+                    var cell12 = row.insertCell(11);
+                    var cell13 = row.insertCell(12);
+                    var cell14 = row.insertCell(13);
+                    var cell15 = row.insertCell(14);
+                    var cell16 = row.insertCell(15);
+                    var cell17 = row.insertCell(16);
+                    var cell18 = row.insertCell(17);
+                    var cell19 = row.insertCell(18);
+                    var cell20 = row.insertCell(19);
+                    cell1.innerHTML = i + 1;
+                    cell2.innerHTML = response.data[i].requestNumber
+                    cell3.innerHTML = response.data[i].requestStatus
+                    cell4.innerHTML = response.data[i].equipmentCategory
+                    cell5.innerHTML = response.data[i].equipmentHeight
+                    cell6.innerHTML = response.data[i].equipmentLength
+                    cell7.innerHTML = response.data[i].equipmentWidth
+                    cell8.innerHTML = response.data[i].equipmentQuantity
+                    cell9.innerHTML = response.data[i].capacityOfTransport
+                    cell10.innerHTML = response.data[i].startDatetime
+                    cell11.innerHTML = response.data[i].endDatetime
+                    cell12.innerHTML = response.data[i].startLocationPostalCode
+                    cell13.innerHTML = response.data[i].endLocationPostalCode
+                    cell14.innerHTML = response.data[i].routeDistance
+                    cell15.innerHTML = response.data[i].typeOfTransporting
+                    cell16.innerHTML = response.data[i].rentalByTrip
+                    cell17.innerHTML = response.data[i].rentalDuration
+                    cell18.innerHTML = response.data[i].specialRequest
+                    cell19.innerHTML = response.data[i].requestSubmissionTime
+                    cell20.innerHTML = `<button type="button" class="btn btn-success"> Place Bid <i class="fas fa-edit"></i></button>`
+                    var request1 = response.data[i].requestNumber;
+                    console.log(request1);
+                    urlRequest = "http://localhost:8710/processing/api/biddinginterface/getRequest/{requestId}/{userId}"
+
+                    cell20.onclick = function (request1) {
+
+                        url = "http://localhost:8710/processing/api/user/place-bid"
+                        console.log(sessionStorage.getItem("userId"));
+                        console.log(request1);
+
+                        var data = JSON.stringify({
+                            // need change bidPrice, request and resource!!!!!!!!!!!!!!!
+                            "bidPrice": 1111,
+                            "bidderId": sessionStorage.getItem("userId"),
+                            "request": "6",
+                            "resource": [
+                                "11","23"
+                            ]
+                        });
+                        var config = {
+                            method: 'post',
+                            url: url,
+                            headers: {
+                                'Content-Type': 'application/json',
+                                "Authorization": "Bearer " + sessionStorage.getItem("accessToken")
+                            },
+                            data: data
+
+                        };
+                        axios(config)
+                            .then(response => {
+                                console.log(response)
+                                alert("Bid sucessfully placed")
+                                //location.reload();
+                                window.location.href = "./index.html" 
+
+
+                            })
+                            .catch(error => alert(error))
+                    }
+
+                    
+
+                    
+
+
+
+                }
+
+
+                for (i = 0; i < response.data.currentPartners.length; i++) {
+
+                    var resourcetable = document.getElementById("requestTable")
+                    var row = resourcetable.insertRow(-1);
+
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    var cell3 = row.insertCell(2);
+                    var cell4 = row.insertCell(3);
+                    var cell5 = row.insertCell(4);
+                    var cell6 = row.insertCell(5);
+                    cell1.innerHTML = total + 1;
+                    total++;
+                    cell2.innerHTML = response.data.currentPartners[i].email
+                    cell3.innerHTML = response.data.currentPartners[i].fullName
+                    cell4.innerHTML = response.data.currentPartners[i].phoneNumber
+                    cell5.innerHTML = response.data.currentPartners[i].username
+                    cell6.innerHTML = `<button type="button" class="btn btn-danger"> Disable <i class="fas fa-edit"></i></button>`
+
+
+                    userId = response.data.currentPartners[i].userId
+                    cell6.onclick = function () {
+                        url = "http://localhost:8710/user/api/admin/togglePartner/" + userId
+
+                        var config = {
+                            method: 'get',
+                            url: url,
+                            headers: {
+                                'Content-Type': 'application/json',
+                                "Authorization": "Bearer " + sessionStorage.getItem("accessToken")
+                            },
+
+                        };
+                        axios(config)
+                            .then(response => {
+                                alert(response.data)
+                                location.reload();
+
+
+                            })
+                            .catch(error => alert(error))
+                    }
+
+
+
+                }
+
+
+            })
+
+
+        
+
+        function logoutfunction() {
+            sessionStorage.clear();
+            window.location.href = "index.html";
+        }
+
+    </script>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+
+</html>
